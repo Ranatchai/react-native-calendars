@@ -1,8 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   FlatList,
   ActivityIndicator,
-  View
+  View,
+  Text
 } from 'react-native';
 import Reservation from './reservation';
 import PropTypes from 'prop-types';
@@ -40,7 +41,7 @@ class ReactComp extends Component {
     this.state = {
       reservations: []
     };
-    this.heights=[];
+    this.heights = [];
     this.selectedDay = this.props.selectedDay;
     this.scrollOver = true;
   }
@@ -63,7 +64,7 @@ class ReactComp extends Component {
         scrollPosition += this.heights[i] || 0;
       }
       this.scrollOver = false;
-      this.list.scrollToOffset({offset: scrollPosition, animated: true});
+      this.list.scrollToOffset({ offset: scrollPosition, animated: true });
     }
     this.selectedDay = props.selectedDay;
     this.updateDataSource(reservations.reservations);
@@ -106,7 +107,7 @@ class ReactComp extends Component {
     this.heights[ind] = event.nativeEvent.layout.height;
   }
 
-  renderRow({item, index}) {
+  renderRow({ item, index }) {
     return (
       <View onLayout={this.onRowLayoutChange.bind(this, index)}>
         <Reservation
@@ -148,7 +149,7 @@ class ReactComp extends Component {
 
   getReservations(props) {
     if (!props.reservations || !props.selectedDay) {
-      return {reservations: [], scrollPosition: 0};
+      return { reservations: [], scrollPosition: 0 };
     }
     let reservations = [];
     if (this.state.reservations && this.state.reservations.length) {
@@ -173,24 +174,26 @@ class ReactComp extends Component {
       }
       iterator.addDays(1);
     }
-
-    return {reservations, scrollPosition};
+    return { reservations, scrollPosition };
   }
 
   render() {
     if (!this.props.reservations || !this.props.reservations[this.props.selectedDay.toString('yyyy-MM-dd')]) {
-      return (<ActivityIndicator style={{marginTop: 80}}/>);
+      return (<ActivityIndicator style={{ marginTop: 80 }} />);
     }
     return (
       <FlatList
         ref={(c) => this.list = c}
         style={this.props.style}
         renderItem={this.renderRow.bind(this)}
+        ListFooterComponent={this.props.ListFooterComponent}
+        ListHeaderComponent={this.props.ListHeaderComponent}
+        onEndReached={this.props.onEndReached}
         data={this.state.reservations}
         onScroll={this.onScroll.bind(this)}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={200}
-        onMoveShouldSetResponderCapture={() => {this.onListTouch(); return false;}}
+        onMoveShouldSetResponderCapture={() => { this.onListTouch(); return false; }}
         keyExtractor={(item, index) => index}
       />
     );
