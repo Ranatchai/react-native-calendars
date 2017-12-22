@@ -263,7 +263,10 @@ export default class AgendaView extends Component {
   }
 
   _scrollToPrevDay = () => {
-    this.chooseDay(this.state.topDay.clone().addDays(-1))
+    this.chooseDay(this.state.topDay.clone().addDays(-1), !this.state.calendarScrollable)
+  }
+  _scrollToNextDay = () => {
+    this.chooseDay(this.state.topDay.clone().addDays(1), !this.state.calendarScrollable)
   }
   _loadNext = async () => {
     this.props.loadItemsForMonth(xdateToData(parseDate(this.props.lastDayLoaded)))
